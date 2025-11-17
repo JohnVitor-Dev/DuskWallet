@@ -1,0 +1,234 @@
+.layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--bg-page);
+}
+
+.layout-sidebar {
+    width: 260px;
+    background-color: var(--bg-card);
+    border-right: 1px solid var(--border-color);
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition-normal);
+    z-index: 100;
+}
+
+.layout-sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.layout-sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--accent-yellow) 0%, #e5d000 100%);
+    border-radius: var(--radius-sm);
+}
+
+.layout-sidebar-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-light);
+}
+
+.layout-sidebar-nav {
+    flex: 1;
+    padding: var(--space-4);
+    overflow-y: auto;
+}
+
+.layout-sidebar-footer {
+    padding: var(--space-4);
+    border-top: 1px solid var(--border-color);
+}
+
+.layout-main {
+    flex: 1;
+    margin-left: 260px;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left var(--transition-normal);
+}
+
+.layout-header {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-4) var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+}
+
+.layout-header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.layout-header-menu-button {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.layout-header-menu-button:hover {
+    background-color: var(--bg-secondary);
+}
+
+.layout-header-balance {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.layout-header-balance-label {
+    font-size: 0.75rem;
+    color: var(--text-gray);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.layout-header-balance-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-light);
+}
+
+.layout-header-balance-positive {
+    color: var(--success-green);
+}
+
+.layout-header-balance-negative {
+    color: var(--danger-red);
+}
+
+.layout-header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.layout-header-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.layout-header-user:hover {
+    background-color: var(--bg-secondary);
+}
+
+.layout-header-user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--accent-yellow) 0%, #e5d000 100%);
+    border-radius: 50%;
+    font-weight: 700;
+    color: var(--bg-primary);
+    font-size: 0.875rem;
+}
+
+.layout-header-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.layout-header-user-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.layout-header-user-email {
+    font-size: 0.75rem;
+    color: var(--text-gray);
+}
+
+.layout-content {
+    flex: 1;
+    padding: var(--space-6);
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Mobile sidebar overlay */
+.layout-sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    animation: fadeIn var(--transition-fast);
+}
+
+/* Mobile adjustments */
+@media (max-width: 1024px) {
+    .layout-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .layout-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .layout-sidebar-overlay.visible {
+        display: block;
+    }
+
+    .layout-main {
+        margin-left: 0;
+    }
+
+    .layout-header-menu-button {
+        display: flex;
+    }
+
+    .layout-header-user-info {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .layout-header {
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .layout-header-balance-value {
+        font-size: 1.25rem;
+    }
+
+    .layout-content {
+        padding: var(--space-4);
+    }
+}

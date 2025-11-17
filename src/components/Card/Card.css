@@ -1,0 +1,71 @@
+.card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-secondary);
+    color: var(--accent-yellow);
+}
+
+.card-title {
+    flex: 1;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.card-body {
+    padding: var(--space-6);
+}
+
+.card-footer {
+    padding: var(--space-4) var(--space-6);
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+}
+
+/* Clickable card */
+.card-clickable {
+    cursor: pointer;
+}
+
+.card-clickable:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-yellow);
+}
+
+/* Compact card */
+.card-compact .card-header {
+    padding: var(--space-3) var(--space-4);
+}
+
+.card-compact .card-body {
+    padding: var(--space-4);
+}
+
+.card-compact .card-footer {
+    padding: var(--space-3) var(--space-4);
+}

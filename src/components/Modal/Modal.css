@@ -1,0 +1,117 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--space-4);
+    animation: fadeIn var(--transition-fast);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp var(--transition-normal);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-sm {
+    max-width: 400px;
+}
+
+.modal-md {
+    max-width: 600px;
+}
+
+.modal-lg {
+    max-width: 800px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    color: var(--text-gray);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-light);
+}
+
+.modal-body {
+    padding: var(--space-6);
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .modal {
+        max-height: 95vh;
+    }
+
+    .modal-sm,
+    .modal-md,
+    .modal-lg {
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,96 @@
+.input-wrapper {
+    margin-bottom: var(--space-4);
+}
+
+.input-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-bottom: var(--space-2);
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: var(--space-3);
+    color: var(--text-gray);
+    display: flex;
+    align-items: center;
+}
+
+.input-prefix {
+    position: absolute;
+    left: var(--space-3);
+    color: var(--text-gray);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.input {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-light);
+    font-size: 0.875rem;
+    transition: all var(--transition-fast);
+}
+
+.input-with-icon {
+    padding-left: 42px;
+}
+
+.input-with-prefix {
+    padding-left: 42px;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--accent-yellow);
+    background-color: var(--bg-secondary);
+}
+
+.input::placeholder {
+    color: var(--text-gray);
+}
+
+.input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.input-error {
+    border-color: var(--danger-red);
+}
+
+.input-error:focus {
+    border-color: var(--danger-red);
+}
+
+.input-error-message {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    font-size: 0.75rem;
+    color: var(--danger-red);
+}
+
+.input-helper {
+    margin-top: var(--space-2);
+    font-size: 0.75rem;
+    color: var(--text-gray);
+}
+
+/* Textarea */
+textarea.input {
+    min-height: 100px;
+    resize: vertical;
+}
