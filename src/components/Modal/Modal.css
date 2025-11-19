@@ -105,13 +105,52 @@
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
+    .modal-overlay {
+        padding: var(--space-3) var(--space-4);
+    }
+
     .modal {
-        max-height: 95vh;
+        max-height: 90vh;
     }
 
     .modal-sm,
     .modal-md,
     .modal-lg {
         max-width: 100%;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: var(--space-4);
+    }
+
+    .modal-title {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-overlay {
+        padding: var(--space-2) var(--space-3);
+    }
+
+    .modal {
+        max-height: 95vh;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: var(--space-3);
+    }
+
+    .modal-title {
+        font-size: 1rem;
+    }
+
+    .modal-close {
+        width: 28px;
+        height: 28px;
     }
 }

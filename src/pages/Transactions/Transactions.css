@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .transactions-header {
@@ -48,43 +50,45 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+    width: 100%;
+    overflow-x: hidden;
 }
 
-.transaction-card {
+.transaction-item {
     display: flex;
     align-items: center;
     gap: var(--space-4);
     padding: var(--space-4);
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-sm);
     transition: all var(--transition-fast);
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
 }
 
-.transaction-card:hover {
-    border-color: var(--accent-yellow);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+.transaction-item:hover {
+    background-color: var(--hover-card);
 }
 
-.transaction-card-icon {
+.transaction-item-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-md);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
 }
 
-.transaction-card-content {
+.transaction-item-info {
     flex: 1;
     min-width: 0;
 }
 
-.transaction-card-description {
-    font-size: 1rem;
-    font-weight: 600;
+.transaction-item-description {
+    font-size: 0.875rem;
+    font-weight: 500;
     color: var(--text-light);
     margin-bottom: var(--space-1);
     white-space: nowrap;
@@ -92,41 +96,39 @@
     text-overflow: ellipsis;
 }
 
-.transaction-card-meta {
+.transaction-item-meta {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
     gap: var(--space-2);
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: var(--text-gray);
 }
 
-.transaction-card-badge {
-    display: inline-flex;
+.transaction-item-actions {
+    display: flex;
     align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-2);
-    background-color: var(--bg-secondary);
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
+    gap: var(--space-3);
+    flex-shrink: 0;
 }
 
-.transaction-card-amount {
-    font-size: 1.25rem;
+.transaction-item-amount {
+    font-size: 1rem;
     font-weight: 700;
     white-space: nowrap;
-    margin-right: var(--space-4);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
 }
 
-.transaction-card-amount-income {
+.transaction-item-income {
     color: var(--success-green);
 }
 
-.transaction-card-amount-expense {
+.transaction-item-expense {
     color: var(--danger-red);
 }
 
-.transaction-card-actions {
+.transaction-item-buttons {
     display: flex;
     gap: var(--space-2);
 }
@@ -160,28 +162,7 @@
     background-color: rgba(239, 68, 68, 0.2);
 }
 
-.fab-button {
-    position: fixed;
-    right: var(--space-6);
-    bottom: var(--space-6);
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background-color: var(--accent-yellow);
-    color: var(--bg-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow-xl);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    z-index: 50;
-}
 
-.fab-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.3);
-}
 
 .transaction-form {
     display: flex;
@@ -256,31 +237,101 @@
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
+    .transactions-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-3);
+        width: 100%;
+    }
+
+    .transactions-header-content {
+        width: 100%;
+    }
+
     .transactions-title {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
+        word-break: break-word;
+    }
+
+    .transactions-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .transactions-header button {
+        width: 100%;
+        max-width: 100%;
     }
 
     .transactions-filters {
         grid-template-columns: 1fr;
+        padding: var(--space-3);
     }
 
     .transaction-form-row {
         grid-template-columns: 1fr;
     }
 
-    .transaction-card {
+    .transaction-item {
+        padding: var(--space-3);
+    }
+
+    .transaction-item-actions {
+        gap: var(--space-2);
+    }
+
+    .transaction-action-btn {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .transactions-title {
+        font-size: 1.2rem;
+    }
+
+    .transactions-subtitle {
+        font-size: 0.75rem;
+    }
+
+    .transactions-filters {
+        padding: var(--space-2);
+        gap: var(--space-3);
+    }
+
+    .transaction-item {
+        padding: var(--space-2);
+        gap: var(--space-2);
+        max-width: 100%;
+    }
+
+    .transaction-item-icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+    }
+
+    .transaction-item-description {
+        font-size: 0.85rem;
+    }
+
+    .transaction-item-meta {
+        font-size: 0.7rem;
         flex-wrap: wrap;
     }
 
-    .transaction-card-amount {
-        margin-right: 0;
-        width: 100%;
-        text-align: right;
-        margin-top: var(--space-2);
+    .transaction-item-amount {
+        font-size: 0.9rem;
+        max-width: 100px;
     }
 
-    .fab-button {
-        right: var(--space-4);
-        bottom: var(--space-4);
+    .transaction-item-actions {
+        gap: var(--space-1);
+        flex-shrink: 0;
+    }
+
+    .type-option {
+        padding: var(--space-3);
+        font-size: 0.85rem;
     }
 }

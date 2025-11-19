@@ -70,3 +70,14 @@
     color: var(--text-light);
     padding: var(--space-2);
 }
+
+@media (max-width: 480px) {
+    .select {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.8rem;
+    }
+
+    .select-label {
+        font-size: 0.8rem;
+    }
+}

@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../components/Toast/Toast';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
+import { validateEmail, validatePassword, sanitizeInput } from '../../utils/validation';
 import './Auth.css';
 
 function Login() {
@@ -23,17 +24,11 @@ function Login() {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.email) {
-            newErrors.email = 'Email é obrigatório';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email inválido';
-        }
+        const emailError = validateEmail(formData.email);
+        if (emailError) newErrors.email = emailError;
 
-        if (!formData.password) {
-            newErrors.password = 'Senha é obrigatória';
-        } else if (formData.password.length < 6) {
-            newErrors.password = 'Senha deve ter no mínimo 6 caracteres';
-        }
+        const passwordError = validatePassword(formData.password);
+        if (passwordError) newErrors.password = passwordError;
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -41,12 +36,11 @@ function Login() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-        // Limpa erro do campo ao digitar
+        const sanitizedValue = sanitizeInput(value);
+        setFormData(prev => ({ ...prev, [name]: sanitizedValue }));
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
-        // Limpa erro geral ao digitar
         if (generalError) {
             setGeneralError('');
         }

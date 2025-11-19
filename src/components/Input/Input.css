@@ -94,3 +94,24 @@ textarea.input {
     min-height: 100px;
     resize: vertical;
 }
+
+@media (max-width: 480px) {
+    .input {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.8rem;
+    }
+
+    .input-label {
+        font-size: 0.8rem;
+    }
+
+    .input-with-icon,
+    .input-with-prefix {
+        padding-left: 38px;
+    }
+
+    .input-icon,
+    .input-prefix {
+        left: var(--space-2);
+    }
+}

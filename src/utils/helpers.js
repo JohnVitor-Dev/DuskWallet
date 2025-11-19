@@ -15,7 +15,6 @@ import {
     Package
 } from 'lucide-react';
 
-// Enums
 export const TransactionType = {
     INCOME: 'INCOME',
     EXPENSE: 'EXPENSE'
@@ -44,7 +43,6 @@ export const PaymentMethod = {
     CREDITO: 'CREDITO'
 };
 
-// Mapeamento de ícones por categoria
 export const categoryIcons = {
     MORADIA: Home,
     CONTAS: Receipt,
@@ -62,7 +60,6 @@ export const categoryIcons = {
     OUTROS: Package
 };
 
-// Labels amigáveis
 export const categoryLabels = {
     MORADIA: 'Moradia',
     CONTAS: 'Contas',
@@ -86,7 +83,6 @@ export const paymentMethodLabels = {
     CREDITO: 'Crédito'
 };
 
-// Funções auxiliares
 export const getCategoryIcon = (category) => {
     return categoryIcons[category] || Package;
 };
@@ -124,7 +120,6 @@ export const formatDateTime = (date) => {
     }).format(new Date(date));
 };
 
-// Opções para selects
 export const categoryOptions = Object.keys(TransactionCategory).map(key => ({
     value: key,
     label: categoryLabels[key]

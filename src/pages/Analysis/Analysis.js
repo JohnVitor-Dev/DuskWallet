@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
     Brain,
     TrendingUp,
@@ -20,40 +20,24 @@ function Analysis() {
     const [analysis, setAnalysis] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(null);
 
-    const CACHE_KEY = 'duskwallet_analysis';
-    const CACHE_TIMESTAMP_KEY = 'duskwallet_analysis_timestamp';
-
-    useEffect(() => {
-        loadCachedAnalysis();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const loadCachedAnalysis = () => {
-        try {
-            const cachedAnalysis = localStorage.getItem(CACHE_KEY);
-            const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
-
-            if (cachedAnalysis && cachedTimestamp) {
-                setAnalysis(JSON.parse(cachedAnalysis));
-                setLastUpdate(new Date(cachedTimestamp));
-            } else {
-                // Se não há cache, buscar da API
-                fetchAnalysis(false);
-            }
-        } catch (error) {
-            console.error('Erro ao carregar cache:', error);
-            // Se houver erro no cache, buscar da API
-            fetchAnalysis(false);
+    const getUserId = () => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            const userData = JSON.parse(user);
+            return userData.id || userData.email;
         }
+        return 'default';
     };
 
-    const fetchAnalysis = async (showToast = false) => {
+    const CACHE_KEY = useMemo(() => `duskwallet_analysis_${getUserId()}`, []);
+    const CACHE_TIMESTAMP_KEY = useMemo(() => `duskwallet_analysis_timestamp_${getUserId()}`, []);
+
+    const fetchAnalysis = useCallback(async (showToast = false) => {
         try {
             setLoading(true);
             const response = await api.get('/analysis');
 
             if (response.data.message) {
-                // Sem transações
                 setAnalysis(null);
                 localStorage.removeItem(CACHE_KEY);
                 localStorage.removeItem(CACHE_TIMESTAMP_KEY);
@@ -67,7 +51,6 @@ function Analysis() {
                 setAnalysis(analysisData);
                 setLastUpdate(new Date(timestamp));
 
-                // Salvar no localStorage
                 localStorage.setItem(CACHE_KEY, JSON.stringify(analysisData));
                 localStorage.setItem(CACHE_TIMESTAMP_KEY, timestamp);
 
@@ -80,11 +63,32 @@ function Analysis() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [CACHE_KEY, CACHE_TIMESTAMP_KEY, toast]);
 
-    const handleRefresh = () => {
+    const loadCachedAnalysis = useCallback(() => {
+        try {
+            const cachedAnalysis = localStorage.getItem(CACHE_KEY);
+            const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+
+            if (cachedAnalysis && cachedTimestamp) {
+                setAnalysis(JSON.parse(cachedAnalysis));
+                setLastUpdate(new Date(cachedTimestamp));
+            } else {
+                fetchAnalysis(false);
+            }
+        } catch (error) {
+            console.error('Erro ao carregar cache:', error);
+            fetchAnalysis(false);
+        }
+    }, [CACHE_KEY, CACHE_TIMESTAMP_KEY, fetchAnalysis]);
+
+    useEffect(() => {
+        loadCachedAnalysis();
+    }, [loadCachedAnalysis]);
+
+    const handleRefresh = useCallback(() => {
         fetchAnalysis(true);
-    };
+    }, [fetchAnalysis]);
 
     const formatLastUpdate = () => {
         if (!lastUpdate) return null;

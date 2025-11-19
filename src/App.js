@@ -1,66 +1,82 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './components/Toast/Toast';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import Layout from './components/Layout/Layout';
-import Login from './pages/Auth/Login';
-import Register from './pages/Auth/Register';
-import Dashboard from './pages/Dashboard/Dashboard';
-import Transactions from './pages/Transactions/Transactions';
-import Analysis from './pages/Analysis/Analysis';
+
+const Login = lazy(() => import('./pages/Auth/Login'));
+const Register = lazy(() => import('./pages/Auth/Register'));
+const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard'));
+const Transactions = lazy(() => import('./pages/Transactions/Transactions'));
+const Analysis = lazy(() => import('./pages/Analysis/Analysis'));
+const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
+
+const PageLoader = () => (
+    <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        backgroundColor: 'var(--bg-page)',
+        color: 'var(--text-light)',
+        fontSize: '1.25rem'
+    }}>
+        Carregando...
+    </div>
+);
 
 function App() {
     return (
-        <Router>
-            <AuthProvider>
-                <ToastProvider>
-                    <Routes>
-                        {/* Public routes */}
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
+        <ErrorBoundary>
+            <Router>
+                <AuthProvider>
+                    <ToastProvider>
+                        <Suspense fallback={<PageLoader />}>
+                            <Routes>
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/register" element={<Register />} />
 
-                        {/* Protected routes */}
-                        <Route
-                            path="/dashboard"
-                            element={
-                                <ProtectedRoute>
-                                    <Layout>
-                                        <Dashboard />
-                                    </Layout>
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/transactions"
-                            element={
-                                <ProtectedRoute>
-                                    <Layout>
-                                        <Transactions />
-                                    </Layout>
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/analysis"
-                            element={
-                                <ProtectedRoute>
-                                    <Layout>
-                                        <Analysis />
-                                    </Layout>
-                                </ProtectedRoute>
-                            }
-                        />
+                                <Route
+                                    path="/dashboard"
+                                    element={
+                                        <ProtectedRoute>
+                                            <Layout>
+                                                <Dashboard />
+                                            </Layout>
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/transactions"
+                                    element={
+                                        <ProtectedRoute>
+                                            <Layout>
+                                                <Transactions />
+                                            </Layout>
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/analysis"
+                                    element={
+                                        <ProtectedRoute>
+                                            <Layout>
+                                                <Analysis />
+                                            </Layout>
+                                        </ProtectedRoute>
+                                    }
+                                />
 
-                        {/* Redirect root to dashboard */}
-                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-                        {/* 404 - Redirect to dashboard */}
-                        <Route path="*" element={<Navigate to="/dashboard" replace />} />
-                    </Routes>
-                </ToastProvider>
-            </AuthProvider>
-        </Router>
+                                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                                <Route path="*" element={<NotFound />} />
+                            </Routes>
+                        </Suspense>
+                    </ToastProvider>
+                </AuthProvider>
+            </Router>
+        </ErrorBoundary>
     );
 }
 

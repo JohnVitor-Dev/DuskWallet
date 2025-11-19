@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Plus, Edit2, Trash2, Search, Filter } from 'lucide-react';
 import { useToast } from '../../components/Toast/Toast';
 import Button from '../../components/Button/Button';
@@ -26,7 +26,6 @@ function Transactions() {
     const [modalOpen, setModalOpen] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState(null);
 
-    // Filtros
     const [filters, setFilters] = useState({
         search: '',
         type: '',
@@ -34,7 +33,6 @@ function Transactions() {
         paymentMethod: ''
     });
 
-    // Form data
     const [formData, setFormData] = useState({
         type: 'EXPENSE',
         description: '',
@@ -45,17 +43,7 @@ function Transactions() {
     });
     const [formErrors, setFormErrors] = useState({});
 
-    useEffect(() => {
-        fetchTransactions();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        applyFilters();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [transactions, filters]);
-
-    const fetchTransactions = async () => {
+    const fetchTransactions = useCallback(async () => {
         try {
             setLoading(true);
             const response = await api.get('/transactions');
@@ -65,9 +53,9 @@ function Transactions() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [toast]);
 
-    const applyFilters = () => {
+    const filteredTransactionsMemo = useMemo(() => {
         let filtered = [...transactions];
 
         if (filters.search) {
@@ -88,11 +76,18 @@ function Transactions() {
             filtered = filtered.filter(t => t.paymentMethod === filters.paymentMethod);
         }
 
-        // Ordena por data (mais recente primeiro)
         filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        setFilteredTransactions(filtered);
-    };
+        return filtered;
+    }, [transactions, filters]);
+
+    useEffect(() => {
+        fetchTransactions();
+    }, [fetchTransactions]);
+
+    useEffect(() => {
+        setFilteredTransactions(filteredTransactionsMemo);
+    }, [filteredTransactionsMemo]);
 
     const handleFilterChange = (field, value) => {
         setFilters(prev => ({ ...prev, [field]: value }));
@@ -103,7 +98,6 @@ function Transactions() {
     const openModal = (transaction = null) => {
         if (transaction) {
             setEditingTransaction(transaction);
-            // Extrair apenas a parte da data (YYYY-MM-DD) sem conversão de timezone
             const dateOnly = transaction.date.split('T')[0];
             setFormData({
                 type: transaction.type,
@@ -142,7 +136,7 @@ function Transactions() {
         setFormErrors({});
     };
 
-    const validateForm = () => {
+    const validateForm = useCallback(() => {
         const errors = {};
 
         if (!formData.description || formData.description.length < 3) {
@@ -163,11 +157,10 @@ function Transactions() {
 
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
-    };
+    }, [formData]);
 
     const handleFormChange = (e) => {
         const { name, value } = e.target;
-        console.log('Campo alterado:', name, 'Valor:', value);
         setFormData(prev => ({ ...prev, [name]: value }));
         if (formErrors[name]) {
             setFormErrors(prev => ({ ...prev, [name]: '' }));
@@ -178,7 +171,7 @@ function Transactions() {
         setFormData(prev => ({ ...prev, type }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
 
         if (!validateForm()) {
@@ -189,7 +182,6 @@ function Transactions() {
         setLoading(true);
 
         try {
-            // Criar data às 00:00:00 no fuso horário local
             const [year, month, day] = formData.date.split('-');
             const localDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 0, 0, 0);
 
@@ -201,10 +193,6 @@ function Transactions() {
                 paymentMethod: formData.paymentMethod,
                 date: localDate.toISOString()
             };
-
-            console.log('Data original:', formData.date);
-            console.log('Data convertida:', localDate.toISOString());
-            console.log('Dados sendo enviados:', data);
 
             if (editingTransaction) {
                 await api.put(`/transactions/${editingTransaction.id}`, data);
@@ -221,9 +209,9 @@ function Transactions() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [formData, editingTransaction, fetchTransactions, toast, validateForm]);
 
-    const handleDelete = async (id) => {
+    const handleDelete = useCallback(async (id) => {
         if (!window.confirm('Tem certeza que deseja excluir esta transação?')) {
             return;
         }
@@ -235,7 +223,7 @@ function Transactions() {
         } catch (error) {
             toast.error('Erro', 'Não foi possível excluir a transação');
         }
-    };
+    }, [fetchTransactions, toast]);
 
     return (
         <div className="transactions">
@@ -300,9 +288,9 @@ function Transactions() {
                     filteredTransactions.map(transaction => {
                         const CategoryIcon = getCategoryIcon(transaction.category);
                         return (
-                            <div key={transaction.id} className="transaction-card">
+                            <div key={transaction.id} className="transaction-item">
                                 <div
-                                    className="transaction-card-icon"
+                                    className="transaction-item-icon"
                                     style={{
                                         backgroundColor: transaction.type === 'INCOME'
                                             ? 'rgba(16, 185, 129, 0.1)'
@@ -312,41 +300,41 @@ function Transactions() {
                                             : 'var(--danger-red)'
                                     }}
                                 >
-                                    <CategoryIcon size={24} />
+                                    <CategoryIcon size={20} />
                                 </div>
-                                <div className="transaction-card-content">
-                                    <div className="transaction-card-description">
+                                <div className="transaction-item-info">
+                                    <div className="transaction-item-description">
                                         {transaction.description}
                                     </div>
-                                    <div className="transaction-card-meta">
-                                        <span className="transaction-card-badge">
-                                            {getCategoryLabel(transaction.category)}
-                                        </span>
-                                        <span className="transaction-card-badge">
-                                            {getPaymentMethodLabel(transaction.paymentMethod)}
-                                        </span>
+                                    <div className="transaction-item-meta">
+                                        <span>{getCategoryLabel(transaction.category)}</span>
+                                        <span>•</span>
+                                        <span>{getPaymentMethodLabel(transaction.paymentMethod)}</span>
+                                        <span>•</span>
                                         <span>{formatDate(transaction.date)}</span>
                                     </div>
                                 </div>
-                                <div className={`transaction-card-amount transaction-card-amount-${transaction.type === 'INCOME' ? 'income' : 'expense'
-                                    }`}>
-                                    {transaction.type === 'INCOME' ? '+' : '-'} {formatCurrency(transaction.amount)}
-                                </div>
-                                <div className="transaction-card-actions">
-                                    <button
-                                        className="transaction-action-btn transaction-action-btn-edit"
-                                        onClick={() => openModal(transaction)}
-                                        aria-label="Editar"
-                                    >
-                                        <Edit2 size={16} />
-                                    </button>
-                                    <button
-                                        className="transaction-action-btn transaction-action-btn-delete"
-                                        onClick={() => handleDelete(transaction.id)}
-                                        aria-label="Excluir"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
+                                <div className="transaction-item-actions">
+                                    <div className={`transaction-item-amount transaction-item-${transaction.type === 'INCOME' ? 'income' : 'expense'
+                                        }`}>
+                                        {transaction.type === 'INCOME' ? '+' : '-'} {formatCurrency(transaction.amount)}
+                                    </div>
+                                    <div className="transaction-item-buttons">
+                                        <button
+                                            className="transaction-action-btn transaction-action-btn-edit"
+                                            onClick={() => openModal(transaction)}
+                                            aria-label="Editar"
+                                        >
+                                            <Edit2 size={16} />
+                                        </button>
+                                        <button
+                                            className="transaction-action-btn transaction-action-btn-delete"
+                                            onClick={() => handleDelete(transaction.id)}
+                                            aria-label="Excluir"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         );
@@ -363,15 +351,6 @@ function Transactions() {
                     </div>
                 )}
             </div>
-
-            {/* FAB Button */}
-            <button
-                className="fab-button"
-                onClick={() => openModal()}
-                aria-label="Nova transação"
-            >
-                <Plus size={24} />
-            </button>
 
             {/* Modal de adicionar/editar */}
             <Modal
@@ -439,7 +418,7 @@ function Transactions() {
                         name="amount"
                         type="number"
                         step="0.01"
-                        placeholder="0.00"
+                        placeholder="0,00"
                         prefix="R$"
                         value={formData.amount}
                         onChange={handleFormChange}

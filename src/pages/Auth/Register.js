@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../components/Toast/Toast';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
+import { validateEmail, validatePassword, validateName, sanitizeInput } from '../../utils/validation';
 import './Auth.css';
 
 function Register() {
@@ -37,23 +38,14 @@ function Register() {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.name) {
-            newErrors.name = 'Nome é obrigatório';
-        } else if (formData.name.length < 3) {
-            newErrors.name = 'Nome deve ter no mínimo 3 caracteres';
-        }
+        const nameError = validateName(formData.name);
+        if (nameError) newErrors.name = nameError;
 
-        if (!formData.email) {
-            newErrors.email = 'Email é obrigatório';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email inválido';
-        }
+        const emailError = validateEmail(formData.email);
+        if (emailError) newErrors.email = emailError;
 
-        if (!formData.password) {
-            newErrors.password = 'Senha é obrigatória';
-        } else if (formData.password.length < 6) {
-            newErrors.password = 'Senha deve ter no mínimo 6 caracteres';
-        }
+        const passwordError = validatePassword(formData.password);
+        if (passwordError) newErrors.password = passwordError;
 
         if (!formData.confirmPassword) {
             newErrors.confirmPassword = 'Confirme sua senha';
@@ -71,20 +63,18 @@ function Register() {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        const newValue = type === 'checkbox' ? checked : value;
+        const sanitizedValue = type === 'checkbox' ? checked : (type === 'text' || type === 'email' || type === 'password' ? sanitizeInput(value) : value);
+        const newValue = sanitizedValue;
 
         setFormData(prev => ({ ...prev, [name]: newValue }));
 
-        // Calcula força da senha
         if (name === 'password') {
             setPasswordStrength(calculatePasswordStrength(value));
         }
 
-        // Limpa erro do campo ao digitar
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
-        // Limpa erro geral ao digitar
         if (generalError) {
             setGeneralError('');
         }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     TrendingUp,
@@ -40,13 +40,7 @@ function Dashboard() {
     });
     const [transactions, setTransactions] = useState([]);
 
-    useEffect(() => {
-        fetchDashboardData();
-        fetchTransactions();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const fetchDashboardData = async () => {
+    const fetchDashboardData = useCallback(async () => {
         try {
             const response = await api.get('/dashboard');
             setDashboardData({
@@ -57,9 +51,9 @@ function Dashboard() {
         } catch (error) {
             toast.error('Erro', 'Não foi possível carregar os dados do dashboard');
         }
-    };
+    }, [toast]);
 
-    const fetchTransactions = async () => {
+    const fetchTransactions = useCallback(async () => {
         try {
             setLoading(true);
             const response = await api.get('/transactions');
@@ -69,9 +63,14 @@ function Dashboard() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [toast]);
 
-    const getCategoryChartData = () => {
+    useEffect(() => {
+        fetchDashboardData();
+        fetchTransactions();
+    }, [fetchDashboardData, fetchTransactions]);
+
+    const getCategoryChartData = useMemo(() => {
         const categoryTotals = {};
 
         transactions
@@ -88,9 +87,9 @@ function Dashboard() {
             name: category,
             value: categoryTotals[category]
         }));
-    };
+    }, [transactions]);
 
-    const getMonthlyChartData = () => {
+    const getMonthlyChartData = useMemo(() => {
         const monthlyData = {};
 
         transactions.forEach(transaction => {
@@ -109,14 +108,14 @@ function Dashboard() {
         });
 
         return Object.values(monthlyData).slice(-6);
-    };
+    }, [transactions]);
 
     const COLORS = [
         '#FEE715', '#10B981', '#3B82F6', '#F59E0B',
         '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6'
     ];
 
-    const recentTransactions = transactions.slice(0, 5);
+    const recentTransactions = useMemo(() => transactions.slice(0, 5), [transactions]);
 
     return (
         <div className="dashboard">
@@ -239,58 +238,92 @@ function Dashboard() {
             {/* Charts */}
             {transactions.length > 0 && (
                 <div className="dashboard-charts">
-                    <div className="chart-card">
-                        <div className="chart-card-header">
-                            <h3 className="chart-card-title">Despesas por Categoria</h3>
+                    {getCategoryChartData.length > 0 && (
+                        <div className="chart-card">
+                            <div className="chart-card-header">
+                                <h3 className="chart-card-title">Despesas por Categoria</h3>
+                            </div>
+                            <div className="chart-wrapper">
+                                <ResponsiveContainer width="100%" height={400}>
+                                    <PieChart>
+                                        <Pie
+                                            data={getCategoryChartData}
+                                            cx="50%"
+                                            cy="50%"
+                                            labelLine={false}
+                                            label={false}
+                                            outerRadius={80}
+                                            fill="#8884d8"
+                                            dataKey="value"
+                                        >
+                                            {getCategoryChartData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip
+                                            formatter={(value) => formatCurrency(value)}
+                                            contentStyle={{
+                                                backgroundColor: '#1E293B',
+                                                border: '1px solid #334155',
+                                                borderRadius: '8px'
+                                            }}
+                                        />
+                                        <Legend
+                                            verticalAlign="bottom"
+                                            height={36}
+                                            iconType="circle"
+                                            wrapperStyle={{ fontSize: '0.75rem' }}
+                                        />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
-                        <div className="chart-wrapper">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={getCategoryChartData()}
-                                        cx="50%"
-                                        cy="50%"
-                                        labelLine={false}
-                                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                                        outerRadius={80}
-                                        fill="#8884d8"
-                                        dataKey="value"
-                                    >
-                                        {getCategoryChartData().map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip formatter={(value) => formatCurrency(value)} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
+                    )}
 
-                    <div className="chart-card">
-                        <div className="chart-card-header">
-                            <h3 className="chart-card-title">Receitas vs Despesas</h3>
+                    {getMonthlyChartData.length > 0 && (
+                        <div className="chart-card">
+                            <div className="chart-card-header">
+                                <h3 className="chart-card-title">Receitas vs Despesas</h3>
+                            </div>
+                            <div className="chart-wrapper">
+                                <ResponsiveContainer width="100%" height={380}>
+                                    <BarChart
+                                        data={getMonthlyChartData}
+                                        margin={{ top: 5, right: 10, left: 0, bottom: 20 }}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                                        <XAxis
+                                            dataKey="month"
+                                            stroke="#A0AEC0"
+                                            style={{ fontSize: '0.75rem' }}
+                                        />
+                                        <YAxis
+                                            stroke="#A0AEC0"
+                                            style={{ fontSize: '0.75rem' }}
+                                            tickFormatter={(value) => `R$ ${(value / 1000).toFixed(0)}k`}
+                                        />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: '#1E293B',
+                                                border: '1px solid #334155',
+                                                borderRadius: '8px'
+                                            }}
+                                            formatter={(value) => formatCurrency(value)}
+                                        />
+                                        <Legend
+                                            wrapperStyle={{
+                                                fontSize: '0.75rem',
+                                                paddingTop: '10px'
+                                            }}
+                                            iconType="circle"
+                                        />
+                                        <Bar dataKey="income" fill="#10B981" name="Receitas" />
+                                        <Bar dataKey="expense" fill="#EF4444" name="Despesas" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
-                        <div className="chart-wrapper">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={getMonthlyChartData()}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                                    <XAxis dataKey="month" stroke="#A0AEC0" />
-                                    <YAxis stroke="#A0AEC0" />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: '#1E293B',
-                                            border: '1px solid #334155',
-                                            borderRadius: '8px'
-                                        }}
-                                        formatter={(value) => formatCurrency(value)}
-                                    />
-                                    <Legend />
-                                    <Bar dataKey="income" fill="#10B981" name="Receitas" />
-                                    <Bar dataKey="expense" fill="#EF4444" name="Despesas" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
+                    )}
                 </div>
             )}
 

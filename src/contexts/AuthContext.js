@@ -61,6 +61,19 @@ export function AuthProvider({ children }) {
     };
 
     const logout = () => {
+        // Limpar cache de análise do usuário atual
+        const currentUser = localStorage.getItem('user');
+        if (currentUser) {
+            try {
+                const userData = JSON.parse(currentUser);
+                const userId = userData.id || userData.email;
+                localStorage.removeItem(`duskwallet_analysis_${userId}`);
+                localStorage.removeItem(`duskwallet_analysis_timestamp_${userId}`);
+            } catch (error) {
+                console.error('Erro ao limpar cache:', error);
+            }
+        }
+
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setUser(null);

@@ -211,15 +211,49 @@ p {
 
 /* Responsive typography */
 @media (max-width: 768px) {
-    h1 {
-        font-size: 2rem;
+    :root {
+        --space-1: 0.2rem;
+        --space-2: 0.4rem;
+        --space-3: 0.6rem;
+        --space-4: 0.8rem;
+        --space-5: 1rem;
+        --space-6: 1.2rem;
+        --space-8: 1.6rem;
     }
 
-    h2 {
+    h1 {
         font-size: 1.75rem;
     }
 
+    h2 {
+        font-size: 1.5rem;
+    }
+
     h3 {
+        font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --space-1: 0.15rem;
+        --space-2: 0.3rem;
+        --space-3: 0.5rem;
+        --space-4: 0.7rem;
+        --space-5: 0.9rem;
+        --space-6: 1.1rem;
+        --space-8: 1.4rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
         font-size: 1.25rem;
+    }
+
+    h3 {
+        font-size: 1rem;
     }
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
-    Wallet,
     LayoutDashboard,
     ArrowLeftRight,
     Brain,
@@ -18,7 +17,7 @@ import './Layout.css';
 function Layout({ children }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const { user, logout } = useAuth();
+    const { logout } = useAuth();
     const toast = useToast();
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -49,15 +48,6 @@ function Layout({ children }) {
 
     const closeSidebar = () => {
         setSidebarOpen(false);
-    };
-
-    const getUserInitials = () => {
-        if (!user?.name) return user?.email?.charAt(0).toUpperCase() || 'U';
-        const names = user.name.split(' ');
-        if (names.length > 1) {
-            return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
-        }
-        return names[0].charAt(0).toUpperCase();
     };
 
     return (

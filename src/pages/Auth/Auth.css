@@ -192,16 +192,76 @@
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
+    .auth-page {
+        padding: var(--space-3);
+        padding-top: 30px;
+    }
+
+    .auth-container {
+        max-width: 100%;
+    }
+
+    .auth-logo {
+        margin-bottom: var(--space-6);
+    }
+
     .auth-card {
-        padding: var(--space-6);
+        padding: var(--space-5);
     }
 
     .auth-logo-icon {
-        width: 64px;
-        height: 64px;
+        width: 80px;
+        height: 80px;
+    }
+
+    .auth-logo-icon svg {
+        width: 80px;
+        height: 80px;
     }
 
     .auth-logo-title {
         font-size: 1.5rem;
+    }
+
+    .auth-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-page {
+        padding: var(--space-2);
+        padding-top: 20px;
+    }
+
+    .auth-logo {
+        margin-bottom: var(--space-4);
+    }
+
+    .auth-logo-icon {
+        width: 70px;
+        height: 70px;
+    }
+
+    .auth-logo-icon svg {
+        width: 70px;
+        height: 70px;
+    }
+
+    .auth-card {
+        padding: var(--space-4);
+        border-radius: var(--radius-md);
+    }
+
+    .auth-logo-title {
+        font-size: 1.35rem;
+    }
+
+    .auth-title {
+        font-size: 1.15rem;
+    }
+
+    .auth-form {
+        gap: var(--space-3);
     }
 }

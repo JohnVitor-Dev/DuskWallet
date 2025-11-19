@@ -86,6 +86,28 @@
     gap: var(--space-2);
 }
 
+@media (max-width: 480px) {
+    .button {
+        padding: var(--space-2) var(--space-4);
+        font-size: 0.8rem;
+    }
+
+    .button-sm {
+        padding: var(--space-1) var(--space-3);
+        font-size: 0.7rem;
+    }
+
+    .button-md {
+        padding: var(--space-2) var(--space-4);
+        font-size: 0.8rem;
+    }
+
+    .button-lg {
+        padding: var(--space-3) var(--space-6);
+        font-size: 0.9rem;
+    }
+}
+
 /* Loading state */
 .button-loading {
     pointer-events: none;
