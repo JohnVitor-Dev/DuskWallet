@@ -121,15 +121,62 @@ function Dashboard() {
     return (
         <div className="dashboard">
             <div className="dashboard-header">
-                <h1 className="dashboard-title">Dashboard</h1>
+                <div className="dashboard-header-content">
+                    <h1 className="dashboard-title">Dashboard</h1>
+                    <p className="dashboard-subtitle">Visão geral das suas finanças</p>
+                </div>
                 <Button
                     variant="primary"
                     icon={Plus}
                     onClick={() => navigate('/transactions')}
+                    size="lg"
                 >
-                    Nova Transação
+                    Adicionar Transação
                 </Button>
             </div>
+
+            {/* Guia inicial para novos usuários */}
+            {transactions.length === 0 && !loading && (
+                <div className="dashboard-welcome">
+                    <div className="welcome-card">
+                        <h2 className="welcome-title">👋 Bem-vindo ao DuskWallet!</h2>
+                        <p className="welcome-text">
+                            Comece a gerenciar suas finanças de forma inteligente. Siga estes passos:
+                        </p>
+                        <div className="welcome-steps">
+                            <div className="welcome-step">
+                                <div className="welcome-step-number">1</div>
+                                <div className="welcome-step-content">
+                                    <h3>Adicione uma transação</h3>
+                                    <p>Clique no botão "Adicionar Transação" acima para registrar sua primeira receita ou despesa</p>
+                                </div>
+                            </div>
+                            <div className="welcome-step">
+                                <div className="welcome-step-number">2</div>
+                                <div className="welcome-step-content">
+                                    <h3>Acompanhe seu saldo</h3>
+                                    <p>Veja no topo da página seu saldo atualizado automaticamente</p>
+                                </div>
+                            </div>
+                            <div className="welcome-step">
+                                <div className="welcome-step-number">3</div>
+                                <div className="welcome-step-content">
+                                    <h3>Use a IA para análises</h3>
+                                    <p>Acesse "Análise IA" no menu lateral para receber insights sobre seus gastos</p>
+                                </div>
+                            </div>
+                        </div>
+                        <Button
+                            variant="primary"
+                            icon={Plus}
+                            onClick={() => navigate('/transactions')}
+                            size="lg"
+                        >
+                            Começar Agora
+                        </Button>
+                    </div>
+                </div>
+            )}
 
             {/* Stats Cards */}
             <div className="dashboard-stats">
@@ -176,8 +223,8 @@ function Dashboard() {
                         {formatCurrency(dashboardData.balance)}
                     </div>
                     <div className={`stat-card-trend ${dashboardData.balance >= 0
-                            ? 'stat-card-trend-positive'
-                            : 'stat-card-trend-negative'
+                        ? 'stat-card-trend-positive'
+                        : 'stat-card-trend-negative'
                         }`}>
                         {dashboardData.balance >= 0 ? (
                             <ArrowUpRight size={16} />

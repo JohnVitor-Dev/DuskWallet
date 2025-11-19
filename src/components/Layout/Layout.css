@@ -18,28 +18,13 @@
     z-index: 100;
 }
 
-.layout-sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-6);
-    border-bottom: 1px solid var(--border-color);
-}
-
 .layout-sidebar-logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--accent-yellow) 0%, #e5d000 100%);
-    border-radius: var(--radius-sm);
-}
-
-.layout-sidebar-title {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--text-light);
+    padding: var(--space-6);
+    padding-top: var(--space-8);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .layout-sidebar-nav {
@@ -67,19 +52,16 @@
     padding: var(--space-4) var(--space-6);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     position: sticky;
     top: 0;
     z-index: 90;
-}
-
-.layout-header-left {
-    display: flex;
-    align-items: center;
     gap: var(--space-4);
 }
 
 .layout-header-menu-button {
+    position: absolute;
+    left: var(--space-6);
     display: none;
     align-items: center;
     justify-content: center;
@@ -97,8 +79,9 @@
 
 .layout-header-balance {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-1);
 }
 
 .layout-header-balance-label {

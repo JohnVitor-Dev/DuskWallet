@@ -240,7 +240,18 @@ function Transactions() {
     return (
         <div className="transactions">
             <div className="transactions-header">
-                <h1 className="transactions-title">Transações</h1>
+                <div className="transactions-header-content">
+                    <h1 className="transactions-title">Minhas Transações</h1>
+                    <p className="transactions-subtitle">Gerencie suas receitas e despesas</p>
+                </div>
+                <Button
+                    variant="primary"
+                    icon={Plus}
+                    onClick={() => openModal()}
+                    size="lg"
+                >
+                    Nova Transação
+                </Button>
             </div>
 
             {/* Filtros */}
@@ -366,7 +377,7 @@ function Transactions() {
             <Modal
                 isOpen={modalOpen}
                 onClose={closeModal}
-                title={editingTransaction ? 'Editar Transação' : 'Nova Transação'}
+                title={editingTransaction ? 'Editar Transação' : 'Adicionar Nova Transação'}
                 size="md"
                 footer={
                     <>
@@ -384,8 +395,12 @@ function Transactions() {
                 }
             >
                 <form className="transaction-form" onSubmit={handleSubmit}>
+                    <div className="form-help-text" style={{ marginBottom: 'var(--space-4)', padding: 'var(--space-3)', backgroundColor: 'rgba(254, 231, 21, 0.1)', borderRadius: 'var(--radius-md)', fontSize: '0.875rem', color: 'var(--text-gray)' }}>
+                        💡 <strong>Dica:</strong> Receitas aumentam seu saldo (ex: salário, vendas). Despesas diminuem (ex: compras, contas).
+                    </div>
+
                     <div>
-                        <label className="input-label">Tipo</label>
+                        <label className="input-label">Tipo de Transação</label>
                         <div className="transaction-type-selector">
                             <label className={`type-option ${formData.type === 'INCOME' ? 'active' : ''}`}>
                                 <input
@@ -411,16 +426,16 @@ function Transactions() {
                     </div>
 
                     <Input
-                        label="Descrição"
+                        label="Descrição (O que foi?)"
                         name="description"
-                        placeholder="Ex: Compra no supermercado"
+                        placeholder="Ex: Salário, Compra no supermercado, Conta de luz..."
                         value={formData.description}
                         onChange={handleFormChange}
                         error={formErrors.description}
                     />
 
                     <Input
-                        label="Valor"
+                        label="Valor (Quanto custou/recebeu?)"
                         name="amount"
                         type="number"
                         step="0.01"

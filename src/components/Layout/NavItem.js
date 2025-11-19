@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './NavItem.css';
 
-function NavItem({ to, icon: Icon, label, onClick, variant }) {
+function NavItem({ to, icon: Icon, label, onClick, variant, tooltip }) {
     const classes = [
         'nav-item',
         variant === 'danger' && 'nav-item-danger'
@@ -16,6 +16,7 @@ function NavItem({ to, icon: Icon, label, onClick, variant }) {
                     isActive ? `${classes} active` : classes
                 }
                 onClick={onClick}
+                title={tooltip || label}
             >
                 <span className="nav-item-icon">
                     <Icon size={20} />
@@ -26,7 +27,7 @@ function NavItem({ to, icon: Icon, label, onClick, variant }) {
     }
 
     return (
-        <button className={classes} onClick={onClick}>
+        <button className={classes} onClick={onClick} title={tooltip || label}>
             <span className="nav-item-icon">
                 <Icon size={20} />
             </span>

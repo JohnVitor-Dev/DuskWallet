@@ -34,7 +34,6 @@ function Select({
                     )}
                     {options.map((option, index) => (
                         <option key={index} value={option.value}>
-                            {option.icon && `${option.icon} `}
                             {option.label}
                         </option>
                     ))}

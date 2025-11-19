@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://dusk-wallet-api.vercel.app/api',
+    baseURL: process.env.REACT_APP_API_URL || 'https://dusk-wallet-api.vercel.app/api',
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
-// Request interceptor - adiciona token
+// Request interceptor
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
@@ -21,15 +21,17 @@ api.interceptors.request.use(
     }
 );
 
-// Response interceptor - trata erros
+// Response interceptor
 api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            // Token inválido ou expirado
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/login';
+            const currentPath = window.location.pathname;
+            if (currentPath !== '/login' && currentPath !== '/register') {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/login';
+            }
         }
         return Promise.reject(error);
     }

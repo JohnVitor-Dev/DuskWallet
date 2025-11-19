@@ -127,8 +127,7 @@ export const formatDateTime = (date) => {
 // Opções para selects
 export const categoryOptions = Object.keys(TransactionCategory).map(key => ({
     value: key,
-    label: categoryLabels[key],
-    icon: categoryIcons[key]
+    label: categoryLabels[key]
 }));
 
 export const paymentMethodOptions = Object.keys(PaymentMethod).map(key => ({

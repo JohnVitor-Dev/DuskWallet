@@ -11,10 +11,94 @@
     margin-bottom: var(--space-4);
 }
 
+.dashboard-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
 .dashboard-title {
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-light);
+}
+
+.dashboard-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-gray);
+}
+
+/* Welcome Guide */
+.dashboard-welcome {
+    margin-bottom: var(--space-6);
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, rgba(254, 231, 21, 0.1) 0%, rgba(254, 231, 21, 0.05) 100%);
+    border: 2px solid var(--accent-yellow);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    text-align: center;
+}
+
+.welcome-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: var(--space-3);
+}
+
+.welcome-text {
+    font-size: 1rem;
+    color: var(--text-gray);
+    margin-bottom: var(--space-6);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.welcome-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    text-align: left;
+}
+
+.welcome-step {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    display: flex;
+    gap: var(--space-3);
+}
+
+.welcome-step-number {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent-yellow) 0%, #e5d000 100%);
+    color: var(--bg-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.welcome-step-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: var(--space-1);
+}
+
+.welcome-step-content p {
+    font-size: 0.875rem;
+    color: var(--text-gray);
+    line-height: 1.5;
 }
 
 .dashboard-stats {

@@ -11,10 +11,21 @@
     margin-bottom: var(--space-4);
 }
 
+.transactions-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
 .transactions-title {
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-light);
+}
+
+.transactions-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-gray);
 }
 
 .transactions-filters {
@@ -204,16 +215,39 @@
     cursor: pointer;
     transition: all var(--transition-fast);
     font-weight: 600;
+    font-size: 0.95rem;
 }
 
 .type-option:hover {
     border-color: var(--text-gray);
+    transform: translateY(-2px);
 }
 
 .type-option.active {
-    border-color: var(--accent-yellow);
-    background-color: rgba(254, 231, 21, 0.1);
-    color: var(--accent-yellow);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Receita - Verde */
+.type-option.active:has(input[value="INCOME"]) {
+    border-color: var(--success-green);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+    color: var(--success-green);
+}
+
+.type-option:has(input[value="INCOME"]):hover {
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+/* Despesa - Vermelho */
+.type-option.active:has(input[value="EXPENSE"]) {
+    border-color: var(--danger-red);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%);
+    color: var(--danger-red);
+}
+
+.type-option:has(input[value="EXPENSE"]):hover {
+    border-color: rgba(239, 68, 68, 0.5);
 }
 
 .type-option input[type="radio"] {
