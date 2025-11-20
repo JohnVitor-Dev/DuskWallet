@@ -120,18 +120,25 @@ function Dashboard() {
     return (
         <div className="dashboard">
             <div className="dashboard-header">
-                <div className="dashboard-header-content">
-                    <h1 className="dashboard-title">Dashboard</h1>
-                    <p className="dashboard-subtitle">Visão geral das suas finanças</p>
+                <div className="dashboard-header-top">
+                    <div className="dashboard-title-wrapper">
+                        <div className="dashboard-title-icon">
+                            <Wallet size={24} />
+                        </div>
+                        <div>
+                            <h1 className="dashboard-title">Dashboard</h1>
+                            <p className="dashboard-subtitle">Visão geral das suas finanças</p>
+                        </div>
+                    </div>
+                    <Button
+                        variant="primary"
+                        icon={Plus}
+                        onClick={() => navigate('/transactions')}
+                        size="lg"
+                    >
+                        Adicionar Transação
+                    </Button>
                 </div>
-                <Button
-                    variant="primary"
-                    icon={Plus}
-                    onClick={() => navigate('/transactions')}
-                    size="lg"
-                >
-                    Adicionar Transação
-                </Button>
             </div>
 
             {/* Guia inicial para novos usuários */}

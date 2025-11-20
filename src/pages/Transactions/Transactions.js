@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Plus, Edit2, Trash2, Search, Filter } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Filter, ArrowUpRight } from 'lucide-react';
 import { useToast } from '../../components/Toast/Toast';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Input/Input';
@@ -228,18 +228,25 @@ function Transactions() {
     return (
         <div className="transactions">
             <div className="transactions-header">
-                <div className="transactions-header-content">
-                    <h1 className="transactions-title">Minhas Transações</h1>
-                    <p className="transactions-subtitle">Gerencie suas receitas e despesas</p>
+                <div className="transactions-header-top">
+                    <div className="transactions-title-wrapper">
+                        <div className="transactions-title-icon">
+                            <ArrowUpRight size={24} />
+                        </div>
+                        <div>
+                            <h1 className="transactions-title">Minhas Transações</h1>
+                            <p className="transactions-subtitle">Gerencie suas receitas e despesas</p>
+                        </div>
+                    </div>
+                    <Button
+                        variant="primary"
+                        icon={Plus}
+                        onClick={() => openModal()}
+                        size="lg"
+                    >
+                        Nova Transação
+                    </Button>
                 </div>
-                <Button
-                    variant="primary"
-                    icon={Plus}
-                    onClick={() => openModal()}
-                    size="lg"
-                >
-                    Nova Transação
-                </Button>
             </div>
 
             {/* Filtros */}
